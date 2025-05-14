@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json()); 
 
 
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -18,7 +18,7 @@ const db = admin.firestore();
 
 
 function extrairMatricula(email) {
-  const regex = /^([a-zA-Z0-9]+)@faculdade\.edu\.br$/;
+  const regex = /^([a-zA-Z0-9]+)@pucgo\.edu\.br$/;
   const match = email.match(regex);
   return match ? match[1] : null;
 }
@@ -37,7 +37,7 @@ app.post('/identificarUsuario', async (req, res) => {
   }
 
   try {
-    const doc = await db.collection('usuarios').doc(matricula).get();
+    const doc = await db.collection('alunos').doc(matricula).get();
 
     if (!doc.exists) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
