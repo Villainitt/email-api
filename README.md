@@ -1,10 +1,12 @@
 # API para identificação de usuários acadêmicos 🎓
-A API extrai a matrícula do email institucional (formato: `matricula@pucgo.edu.br`) e verifica no Firestore se existe um usuário com essa matrícula cadastrada apresentando matrícula, nome e tipo (aluno ou professor).
+A API extrai a matrícula do email institucional (formato: `matricula@pucgo.edu.br`) e verifica no Firestore se existe um usuário com essa matrícula cadastrada apresentando matrícula, nome e tipo (aluno ou professor). Além disso, faz a verificação do e-mail no momento de cadastro.
 
-## 📍 Endpoint 
-### 'POST identificarUsuario'
-
-## Requisição
+## 📍 Endpoints 
+### 'POST /identificarUsuario'
+### 'POST /cadastrarUsuario'
+---
+## Serviços /identificarUsuario
+### Requisição 
 A requisição é feita da seguinte maneira:
 ```json
 {
@@ -20,7 +22,7 @@ Resposta esperada `(200)`:
 }
 ```
 
-## Erros
+### Erros
 - `400`: Email não fornecido ou inválido;
 - `404`: Usuário não encontrado/cadastrado;
 - `405`: Método não permitido (use somente POST);
