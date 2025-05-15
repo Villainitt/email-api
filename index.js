@@ -55,6 +55,43 @@ app.post('/identificarUsuario', async (req, res) => {
   }
 });
 
+app.post('/cadastrarUsuario', async (req, res) =>  {
+  const email = req.body.email;
+  const nome = req.body.nome || 'Nome Padrão'; 
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email não fornecido' });
+  }
+
+  const matricula = extrairMatricula(email);
+  if (!matricula) {
+    return res.status(400).json({ error: 'Formato de email inválido' });
+  }
+
+  try {
+    const docRef = db.collection('alunos').doc(matricula);
+    const doc = await docRef.get();
+
+    if (doc.exists) {
+      return res.status(400).json({ error: 'Usuário já cadastrado' });
+    }
+
+    
+    await docRef.set({
+      nome: nome,
+      tipo: 'aluno', 
+      criadoEm: admin.firestore.FieldValue.serverTimestamp(),
+      email: email,
+    });
+
+    return res.status(201).json({ message: 'Usuário cadastrado com sucesso', matricula });
+  } catch (error) {
+    console.error('Erro ao cadastrar usuário:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
