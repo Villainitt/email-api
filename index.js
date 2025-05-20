@@ -78,6 +78,7 @@ app.post('/cadastrarUsuario', async (req, res) =>  {
 
     
     await docRef.set({
+      matricula: matricula,
       nome: nome,
       tipo: 'aluno', 
       criadoEm: admin.firestore.FieldValue.serverTimestamp(),
