@@ -23,6 +23,15 @@ function extrairMatricula(email) {
   return match ? match[1] : null;
 }
 
+function identificarTipoUsuario(email) {
+  const localParte = email.split('@')[0];
+  if (/^\d+$/.test(localParte)) {
+    return 'aluno'; 
+  } else {
+    return 'admin'; 
+  }
+}
+
 
 app.post('/identificarUsuario', async (req, res) => {
   const email = req.body.email;
@@ -67,6 +76,7 @@ app.post('/cadastrarUsuario', async (req, res) =>  {
   if (!matricula) {
     return res.status(400).json({ error: 'Formato de email inválido' });
   }
+  const tipo = identificarTipoUsuario(email);
 
   try {
     const docRef = db.collection('alunos').doc(matricula);
@@ -80,7 +90,7 @@ app.post('/cadastrarUsuario', async (req, res) =>  {
     await docRef.set({
       matricula: matricula,
       nome: nome,
-      tipo: 'aluno', 
+      tipo: tipo, 
       criadoEm: admin.firestore.FieldValue.serverTimestamp(),
       email: email,
     });
