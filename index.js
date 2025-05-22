@@ -79,7 +79,7 @@ app.post('/cadastrarUsuario', async (req, res) =>  {
   const tipo = identificarTipoUsuario(email);
 
   try {
-    const docRef = db.collection('alunos').doc(matricula);
+    const docRef = db.collection(tipo === 'aluno' ? 'alunos' : 'professores').doc(matricula);
     const doc = await docRef.get();
 
     if (doc.exists) {
