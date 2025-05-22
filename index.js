@@ -46,7 +46,7 @@ app.post('/identificarUsuario', async (req, res) => {
   }
 
   try {
-    const doc = await db.collection('alunos').doc(matricula).get();
+    const doc = await db.collection(tipo === 'aluno' ? 'alunos' : 'professores').doc(matricula).get();
 
     if (!doc.exists) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
