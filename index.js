@@ -44,6 +44,8 @@ app.post('/identificarUsuario', async (req, res) => {
   if (!matricula) {
     return res.status(400).json({ error: 'Formato de email inválido' });
   }
+  
+  const tipo = identificarTipoUsuario(email);
 
   try {
     const doc = await db.collection(tipo === 'aluno' ? 'alunos' : 'professores').doc(matricula).get();
